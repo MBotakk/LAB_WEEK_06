@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.samuel.lab_week_06.model.CatModel
 
@@ -20,6 +21,14 @@ class CatAdapter(
         notifyDataSetChanged()
     }
 
+    fun removeItem(position: Int) {
+        cats.removeAt(position)
+        notifyItemRemoved(position)
+    }
+    fun getSwipeCallback(): ItemTouchHelper.SimpleCallback {
+        return SwipeToDeleteCallback()
+    }
+
     override fun getItemCount() = cats.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
@@ -30,14 +39,12 @@ class CatAdapter(
                 showSelectionDialog(cat, parent.context)
             }
         }
-
         return CatViewHolder(view, imageLoader, clickListener)
     }
 
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         holder.bindData(cats[position])
     }
-
 
     private fun showSelectionDialog(cat: CatModel, context: Context) {
         AlertDialog.Builder(context)
@@ -47,5 +54,22 @@ class CatAdapter(
                 dialog.dismiss()
             }
             .show()
+    }
+
+    inner class SwipeToDeleteCallback : ItemTouchHelper.SimpleCallback(
+        0,
+        ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+    ) {
+
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean = false
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val position = viewHolder.adapterPosition
+            removeItem(position)
+        }
     }
 }

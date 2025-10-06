@@ -2,6 +2,7 @@ package com.samuel.lab_week_06
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.ItemTouchHelper // Import ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.samuel.lab_week_06.model.CatBreed
@@ -12,8 +13,6 @@ class MainActivity : AppCompatActivity() {
 
     private val recyclerView: RecyclerView by lazy { findViewById(R.id.recycler_view) }
 
-    // Create the adapter by passing the layout inflater and our GlideImageLoader.
-    // This is much simpler now because the adapter handles its own clicks.
     private val catAdapter by lazy {
         CatAdapter(layoutInflater, GlideImageLoader())
     }
@@ -22,11 +21,12 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Setup RecyclerView
+
         recyclerView.adapter = catAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+        val itemTouchHelper = ItemTouchHelper(catAdapter.getSwipeCallback())
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        // Set the data for the adapter
         catAdapter.setData(getCatData())
     }
 

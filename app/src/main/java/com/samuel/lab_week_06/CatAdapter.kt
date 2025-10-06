@@ -1,8 +1,11 @@
 package com.samuel.lab_week_06
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
+import com.samuel.lab_week_06.model.CatModel
 
 class CatAdapter(
     private val layoutInflater: LayoutInflater,
@@ -17,14 +20,32 @@ class CatAdapter(
         notifyDataSetChanged()
     }
 
+    override fun getItemCount() = cats.size
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CatViewHolder {
         val view = layoutInflater.inflate(R.layout.item_list, parent, false)
-        return CatViewHolder(view, imageLoader)
-    }
 
-    override fun getItemCount() = cats.size
+        val clickListener = object : CatViewHolder.OnClickListener {
+            override fun onClick(cat: CatModel) {
+                showSelectionDialog(cat, parent.context)
+            }
+        }
+
+        return CatViewHolder(view, imageLoader, clickListener)
+    }
 
     override fun onBindViewHolder(holder: CatViewHolder, position: Int) {
         holder.bindData(cats[position])
+    }
+
+
+    private fun showSelectionDialog(cat: CatModel, context: Context) {
+        AlertDialog.Builder(context)
+            .setTitle("Cat Selected")
+            .setMessage("You have selected cat: ${cat.name}")
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }

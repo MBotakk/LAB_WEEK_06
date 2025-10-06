@@ -1,4 +1,4 @@
-package com.samuel.lab_week_06
+package com.samuel.lab_week_06.model
 
 import com.samuel.lab_week_06.model.CatBreed
 import com.samuel.lab_week_06.model.Gender

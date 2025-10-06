@@ -1,14 +1,19 @@
 package com.samuel.lab_week_06
 
-import android.content.Context
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 
-class GlideImageLoader(private val context: Context) : ImageLoader {
+/**
+ * An implementation of our ImageLoader interface that uses the Glide library.
+ * It gets the context it needs directly from the ImageView.
+ */
+class GlideImageLoader : ImageLoader {
     override fun loadImage(imageUrl: String, imageView: ImageView) {
-        Glide.with(context)
+        Glide.with(imageView.context)
             .load(imageUrl)
-            .centerCrop()
+            .centerCrop() // Good for making images fill the view nicely
+            // .placeholder(R.drawable.your_placeholder) // Optional: show while loading
+            // .error(R.drawable.your_error_image)       // Optional: show if loading fails
             .into(imageView)
     }
 }
